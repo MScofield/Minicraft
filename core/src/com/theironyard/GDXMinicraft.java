@@ -11,32 +11,50 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 
 public class GDXMinicraft extends ApplicationAdapter {
-	SpriteBatch batch;
-	TextureRegion stand, standLeft, up, moveUp, down, moveDown, left, right, zip;
-	TextureRegion zStand, zUp, zDown, zLeft, zRight;
-	boolean canZip;
-	Animation walkUp, walkDown, walkLeft, walkRight;
-	float time;
 
+	SpriteBatch batch;
+	//hero tile img variables
+	TextureRegion stand, standLeft, up, moveUp, down, moveDown, left, right, zip;
+	//zombie tile img variables
+	TextureRegion zStand, zUp, zDown, zLeft, zRight;
+	//environment tile img variables
+	TextureRegion tree; //cactus, sand pit...
+	//animations
+	Animation walkUp, walkDown, walkLeft, walkRight;
+
+	//hero size, speed, location variables
 	float x, y, xv, yv;
 	static final float MAX_VELOCITY = 250;
 	static final float ZIP_VELOCITY = MAX_VELOCITY *2;
-
 	static final int WIDTH = 43;
 	static final int HEIGHT = 32;
 
+	//zombie size, speed, location variables
 	float zx, zy, zxv, zyv;
 	static final float ZOMBIE_VELOCITY = 175;
 	static final float ZOMBIE_ZIP_VELOCITY = 350;
-
 	static final int ZWIDTH = 43;
 	static final int ZHEIGHT = 32;
-	
+
+	//tree size, speed, location variables
+	float tx, ty;
+	static final int TWIDTH = 75;
+	static final int THEIGHT = 125;
+
+	//cactus location, size variables
+	float cx, cy;
+	static final int CWIDTH = 75;
+	static final int CHEIGHT = 125;
+
+	//operations locatin, size variables
+	float time;
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		Texture tiles = new Texture("tiles.png");
 		TextureRegion [][] grid = TextureRegion.split(tiles, 16,16);
+		//hero image sources
 		zip = grid [1][3];
 		down = grid[6][0];
 		moveDown = grid [7][0];
@@ -52,13 +70,17 @@ public class GDXMinicraft extends ApplicationAdapter {
 		walkLeft = new Animation(0.1f, standLeft, left);
 		walkUp = new Animation(0.1f, up, moveUp);
 		walkDown = new Animation(0.1f, down, moveDown);
-		//zImages = zombie images
+		//zImages = zombie image sources
 		zStand = grid [6][6];
 		zRight = grid [6][7];
 		zUp = grid [6][5];
 		zDown = grid [6][4];
 		zLeft = new TextureRegion(zRight);
 		zLeft.flip(true, false);
+		//environment image sources
+		tree = grid [1][0];
+		//pre-run methods
+		randomAppearance();
 
 	}
 
@@ -72,9 +94,7 @@ public class GDXMinicraft extends ApplicationAdapter {
 
 		if (xv > 10) {
 			img = walkRight.getKeyFrame(time, true);
-			if (xv > 400){
-				img = zip;
-			}
+			if (xv > 400) img = zip;
 		}
 		else if (xv < -10) {
 			img = walkLeft.getKeyFrame(time, true);
@@ -103,6 +123,7 @@ public class GDXMinicraft extends ApplicationAdapter {
 		batch.begin();
 		batch.draw(img, x, y, HEIGHT, WIDTH);
 		batch.draw(zImg, zx, zy, ZHEIGHT, ZWIDTH);
+		batch.draw(tree, tx,ty);
 		batch.end();
 	}
 
@@ -153,6 +174,10 @@ public class GDXMinicraft extends ApplicationAdapter {
 			x = 0;
 		}
 	}
+	public void zMove (){
+		
+
+	}
 
 	public float decelerate(float velocity) {
 		float deceleration = 0.832f;
@@ -162,6 +187,27 @@ public class GDXMinicraft extends ApplicationAdapter {
 		}
 		return velocity;
 	}
+
+
+	public void randomAppearance () {
+
+	zx = (float) Math.random() * Gdx.graphics.getWidth();
+	zy = (float) Math.random() * Gdx.graphics.getHeight();
+	tx = (float) Math.random() * Gdx.graphics.getWidth();
+	ty = (float) Math.random() * Gdx.graphics.getHeight();
+
+//		while (!(rzx > 0) && (rzx < Gdx.graphics.getWidth())) {
+//
+//			if ((rzx > 0) && (rzx < Gdx.graphics.getWidth()))
+//				zx = rzx;
+//		}
+//		while (!(rzy > 0) && (rzx < Gdx.graphics.getWidth())) {
+//
+//			if ((rzy > 0) && (rzx < Gdx.graphics.getWidth()))
+//				zy = rzy;
+//		}
+		}
+
 	
 	@Override
 	public void dispose () {
