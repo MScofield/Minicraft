@@ -31,8 +31,8 @@ public class GDXMinicraft extends ApplicationAdapter {
 
 	//zombie size, speed, location variables
 	float zx, zy, zxv, zyv;
-	static final float ZOMBIE_VELOCITY = 175;
-	static final float ZOMBIE_ZIP_VELOCITY = 350;
+	static final float ZOMBIE_VELOCITY = 205;
+	static final float ZOMBIE_ZIP_VELOCITY = ZOMBIE_VELOCITY *2;
 	static final int ZWIDTH = 43;
 	static final int ZHEIGHT = 32;
 
@@ -46,7 +46,7 @@ public class GDXMinicraft extends ApplicationAdapter {
 	static final int CWIDTH = 75;
 	static final int CHEIGHT = 125;
 
-	//operations locatin, size variables
+	//operations variables
 	float time;
 
 	@Override
@@ -81,6 +81,7 @@ public class GDXMinicraft extends ApplicationAdapter {
 		tree = grid [1][0];
 		//pre-run methods
 		randomAppearance();
+		zyv = ZOMBIE_VELOCITY * -1;
 
 	}
 
@@ -88,6 +89,7 @@ public class GDXMinicraft extends ApplicationAdapter {
 	public void render () {
 		time += Gdx.graphics.getDeltaTime();
 		move();
+		zMove();
 		TextureRegion img;
 		TextureRegion zImg = null;
 		zImg = zStand;
@@ -175,19 +177,64 @@ public class GDXMinicraft extends ApplicationAdapter {
 		}
 	}
 	public void zMove (){
-		
+
+		float randomDirection;
+		randomDirection = (float)Math.random();
+
+		if (((zxv < 10) && (zyv < 10))) {
+
+			if (randomDirection > 0.75) {
+				zyv = ZOMBIE_VELOCITY;
+			}
+			if (randomDirection < 0.25) {
+				zxv = ZOMBIE_VELOCITY;
+			}
+			if ((randomDirection > 0.25) && (randomDirection < 0.5)) {
+				zxv = ZOMBIE_VELOCITY * -1;
+			}
+			if ((randomDirection > 0.5) && (randomDirection < 0.75)) {
+				zyv = ZOMBIE_VELOCITY * -1;
+			}
+		}
+
+		zy = zy + (zyv * Gdx.graphics.getDeltaTime());
+		zx = zx + (zxv * Gdx.graphics.getDeltaTime());
+
+		zyv = zombieDecelerate(zyv);
+		zxv = zombieDecelerate(zxv);
+
+		if (zy < 0){
+			zy = Gdx.graphics.getHeight();
+		}
+		if (zx < 0){
+			zx = Gdx.graphics.getWidth();
+		}
+		if (zy > Gdx.graphics.getHeight()){
+			zy = 0;
+		}
+		if (zx > Gdx.graphics.getWidth()){
+			zx = 0;
+		}
+
 
 	}
 
 	public float decelerate(float velocity) {
-		float deceleration = 0.832f;
+		float deceleration = 0.862f;
 		velocity *= deceleration;
 		if(Math.abs(velocity) < 1){
 			velocity = 0;
 		}
 		return velocity;
 	}
-
+	public float zombieDecelerate(float velocity) {
+		float deceleration = 0.98f;
+		velocity *= deceleration;
+		if(Math.abs(velocity) < 1){
+			velocity = 0;
+		}
+		return velocity;
+	}
 
 	public void randomAppearance () {
 
@@ -196,16 +243,6 @@ public class GDXMinicraft extends ApplicationAdapter {
 	tx = (float) Math.random() * Gdx.graphics.getWidth();
 	ty = (float) Math.random() * Gdx.graphics.getHeight();
 
-//		while (!(rzx > 0) && (rzx < Gdx.graphics.getWidth())) {
-//
-//			if ((rzx > 0) && (rzx < Gdx.graphics.getWidth()))
-//				zx = rzx;
-//		}
-//		while (!(rzy > 0) && (rzx < Gdx.graphics.getWidth())) {
-//
-//			if ((rzy > 0) && (rzx < Gdx.graphics.getWidth()))
-//				zy = rzy;
-//		}
 		}
 
 	
