@@ -53,7 +53,11 @@ public class GDXMinicraft extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		Texture tiles = new Texture("tiles.png");
+		Texture texture = new Texture("tiles.png");
+		//TextureRegion [][] Tree = TextureRegion.split(0,8,16,16);
 		TextureRegion [][] grid = TextureRegion.split(tiles, 16,16);
+		//region[0] = new TextureRegion[](tiles, 0.5,0);
+
 		//hero image sources
 		zip = grid [1][3];
 		down = grid[6][0];
@@ -78,7 +82,7 @@ public class GDXMinicraft extends ApplicationAdapter {
 		zLeft = new TextureRegion(zRight);
 		zLeft.flip(true, false);
 		//environment image sources
-		tree = grid [1][0];
+		//Tree = setRegion(0,8,16,16);
 		//pre-run methods
 		randomAppearance();
 		zyv = ZOMBIE_VELOCITY * -1;
@@ -125,7 +129,7 @@ public class GDXMinicraft extends ApplicationAdapter {
 		batch.begin();
 		batch.draw(img, x, y, HEIGHT, WIDTH);
 		batch.draw(zImg, zx, zy, ZHEIGHT, ZWIDTH);
-		batch.draw(tree, tx,ty);
+//		batch.draw(tree, tx,ty);
 		batch.end();
 	}
 
